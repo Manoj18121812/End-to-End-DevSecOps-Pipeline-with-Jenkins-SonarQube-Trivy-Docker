@@ -1,35 +1,29 @@
 version: '3.8'
-
 services:
-
   mysql:
-    image: mysql:8
+    image: mysql:8.0
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      
+      MYSQL_DATABASE: productdb
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    
-
-  user-service:
-    build: ./User-service
-    container_name: user-service
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mysql
+      - mysql_data:/var/lib/mysql
 
   product-service:
-    build: ./Product-service
+    build:
+      context: ./Product-service
+      dockerfile: Dockerfile
     container_name: product-service
-    ports:
-      - "8082:8082"
     depends_on:
       - mysql
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
 
 volumes:
-  mysql-data:  
+  mysql_data:

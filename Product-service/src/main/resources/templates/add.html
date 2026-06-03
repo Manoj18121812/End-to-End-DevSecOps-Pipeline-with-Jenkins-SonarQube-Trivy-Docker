@@ -1,121 +1,92 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Product</title>
+  <title>Add Product</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f5f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
 
-    <style>
+    .card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; width: 100%; max-width: 420px; overflow: hidden; }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .card-header { padding: 1.5rem 1.5rem 1.25rem; border-bottom: 0.5px solid #e0e0e0; }
+    .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #888; text-decoration: none; margin-bottom: 1rem; transition: color .12s; }
+    .back-link:hover { color: #0d0d0d; }
+    .header-row { display: flex; align-items: center; gap: 12px; }
+    .header-icon { width: 40px; height: 40px; border-radius: 8px; background: #e6f1fb; display: flex; align-items: center; justify-content: center; color: #185fa5; font-size: 18px; }
+    .header-title { font-size: 17px; font-weight: 600; color: #0d0d0d; }
+    .header-sub { font-size: 12px; color: #888; margin-top: 2px; }
 
-        .form-container {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            width: 350px;
-            text-align: center;
+    .card-body { padding: 1.5rem; }
+    .field { margin-bottom: 1.1rem; }
+    .field label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; letter-spacing: .02em; }
+    .input-wrap { position: relative; }
+    .input-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 15px; color: #aaa; pointer-events: none; }
+    .input-wrap input { width: 100%; padding: 10px 12px 10px 36px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 13px; color: #0d0d0d; outline: none; transition: border-color .15s, box-shadow .15s; }
+    .input-wrap input:focus { border-color: #aaa; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+    .input-wrap input::placeholder { color: #bbb; }
+    .hint { font-size: 11px; color: #bbb; margin-top: 5px; }
 
-            box-shadow:
-                0 15px 35px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-
-            transform: perspective(1000px) rotateX(5deg);
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 12px 0;
-            border-radius: 8px;
-            border: none;
-
-            background: linear-gradient(to bottom, #f0f0f0, #dcdcdc);
-
-            box-shadow:
-                inset 2px 2px 5px rgba(0,0,0,0.2),
-                inset -2px -2px 5px rgba(255,255,255,0.8);
-
-            font-size: 14px;
-        }
-
-        input:focus {
-            outline: none;
-            box-shadow:
-                inset 1px 1px 4px rgba(0,0,0,0.3),
-                0 0 10px rgba(56,239,125,0.7);
-        }
-
-        button {
-            margin-top: 15px;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-
-            background: linear-gradient(to bottom, #11998e, #38ef7d);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-
-            box-shadow:
-                0 6px 0 #0b6b63,
-                0 12px 20px rgba(0,0,0,0.3);
-
-            transition: all 0.2s ease;
-        }
-
-        button:hover {
-            transform: translateY(3px);
-            box-shadow:
-                0 3px 0 #0b6b63,
-                0 6px 12px rgba(0,0,0,0.3);
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #11998e;
-            font-size: 14px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-    </style>
-
+    .card-footer { padding: 0 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+    .submit-btn { width: 100%; padding: 11px; border-radius: 8px; background: #0d0d0d; color: #fff; font-size: 13px; font-weight: 500; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity .15s; }
+    .submit-btn:hover { opacity: .85; }
+    .divider { display: flex; align-items: center; gap: 10px; }
+    .divider-line { flex: 1; height: 0.5px; background: #e0e0e0; }
+    .divider-text { font-size: 11px; color: #bbb; }
+    .cancel-btn { width: 100%; padding: 10px; border-radius: 8px; background: transparent; border: 0.5px solid #e0e0e0; color: #888; font-size: 13px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .12s; }
+    .cancel-btn:hover { background: #f4f5f7; }
+  </style>
 </head>
-
 <body>
 
-<div class="form-container">
+<div class="card">
+  <div class="card-header">
+    <a href="/" class="back-link">
+      <i class="ti ti-arrow-left"></i> Back to products
+    </a>
+    <div class="header-row">
+      <div class="header-icon"><i class="ti ti-package"></i></div>
+      <div>
+        <div class="header-title">Add new product</div>
+        <div class="header-sub">Fill in the details below to create a listing</div>
+      </div>
+    </div>
+  </div>
 
-    <h2>📦 Add Product</h2>
+  <form action="/save" method="post">
+    <div class="card-body">
+      <div class="field">
+        <label for="name">Product name</label>
+        <div class="input-wrap">
+          <i class="ti ti-tag"></i>
+          <input type="text" id="name" name="name" placeholder="e.g. Wireless Headphones" required />
+        </div>
+        <div class="hint">Enter a clear, descriptive product name</div>
+      </div>
+      <div class="field">
+        <label for="price">Price (₹)</label>
+        <div class="input-wrap">
+          <i class="ti ti-currency-rupee"></i>
+          <input type="text" id="price" name="price" placeholder="e.g. 1499" required />
+        </div>
+        <div class="hint">Enter price in Indian Rupees</div>
+      </div>
+    </div>
 
-    <form action="/save" method="post">
-
-        <input type="text" name="name" placeholder="Enter Product Name" required>
-
-        <input type="text" name="price" placeholder="Enter Product Price" required>
-
-        <button type="submit">💾 Save Product</button>
-
-    </form>
-
-    <a href="/" class="back-link">⬅ Back to Product List</a>
-
+    <div class="card-footer">
+      <button type="submit" class="submit-btn">
+        <i class="ti ti-device-floppy"></i> Save product
+      </button>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or</span>
+        <div class="divider-line"></div>
+      </div>
+      <a href="/" class="cancel-btn">
+        <i class="ti ti-x"></i> Cancel
+      </a>
+    </div>
+  </form>
 </div>
 
 </body>

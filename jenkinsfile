@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk'
+    }
+
+    environment {
+        SONAR_HOME = tool "sonar"
+       NVD_API_KEY = credentials('nvd-api-key')
+    }
+
+    stages {
+
+        stage("Code Clone From GitHub") {
+            steps {
+                git url: "https://github.com/Manoj18121812/End-to-End-DevSecOps-Pipeline-with-Jenkins-SonarQube-Trivy-Docker.git",
+                    branch: "main"
+            }
+        }
+
+        stage('Build Application') {
+    steps {
+        dir('Product-service') {
+            sh 'mvn clean package -DskipTests'
+        }
+    }
+}
+
+        stage("SonarQube Quality Analysis") {
+            steps {
+                dir("Product-service") {
+                    withSonarQubeEnv("sonar") {
+                        sh """
+                        $SONAR_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=DevSecOps \
+                        -Dsonar.projectKey=DevSecOps \
+                        -Dsonar.java.binaries=target/classes
+                        """
+                    }
+                }
+            }
+        }
+
+        stage("OWASP Dependency Check") {
+    steps {
+        dir("Product-service") {
+            dependencyCheck(
+                odcInstallation: 'dc',
+                additionalArguments: """
+                    --scan .
+                    --format XML
+                    --nvdApiKey ${NVD_API_KEY}
+                """
+            )
+        }
+
+        dependencyCheckPublisher(
+            pattern: '**/dependency-check-report.xml'
+        )
+    }
+}
+
+        stage("Sonar Quality Gate Scan") {
+            steps {
+                timeout(time: 2, unit: "MINUTES") {
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
+
+        stage("Trivy File System Scan") {
+            steps {
+                dir("Product-service") {
+                    sh "trivy fs --format table ."
+                }
+            }
+        }
+        stage('Deploy Using Docker Compose') {
+    steps {
+        sh 'docker compose up -d --build'
+    }
+}
+    }
+}

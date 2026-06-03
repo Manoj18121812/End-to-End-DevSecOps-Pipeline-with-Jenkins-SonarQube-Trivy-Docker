@@ -1,128 +1,133 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Service All</title>
+  <title>Product Service</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f5f7; min-height: 100vh; padding: 2rem 1.5rem; }
 
-    <style>
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon { width: 38px; height: 38px; border-radius: 8px; background: #e6f1fb; display: flex; align-items: center; justify-content: center; color: #185fa5; font-size: 18px; }
+    .brand-name { font-size: 16px; font-weight: 600; color: #0d0d0d; }
+    .brand-sub { font-size: 12px; color: #666; }
+    .add-btn { display: flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; background: #0d0d0d; color: #fff; font-size: 13px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity .15s; }
+    .add-btn:hover { opacity: .85; }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            padding: 40px;
-        }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+    .stat { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1rem 1.25rem; }
+    .stat-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+    .stat-val { font-size: 22px; font-weight: 600; color: #0d0d0d; }
+    .stat-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-top: 4px; background: #eaf3de; color: #3b6d11; }
 
-        h2 {
-            text-align: center;
-            color: white;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-        }
+    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+    .search-wrap { flex: 1; position: relative; }
+    .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 15px; color: #aaa; }
+    .search-wrap input { width: 100%; padding: 8px 10px 8px 34px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 13px; color: #0d0d0d; outline: none; }
+    .filter-btn { display: flex; align-items: center; gap: 5px; padding: 8px 14px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 13px; color: #666; cursor: pointer; }
 
-        .add-btn {
-            display: block;
-            width: 180px;
-            margin: 20px auto;
-            text-align: center;
-            padding: 12px;
-            border-radius: 10px;
-            background: linear-gradient(to bottom, #ffffff, #dcdcdc);
-            color: black;
-            text ترى-decoration: none;
-            font-weight: bold;
-            box-shadow:
-                0 6px 0 #999,
-                0 10px 20px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
+    .table-card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; overflow: hidden; }
+    .table-head { display: grid; grid-template-columns: 60px 1fr 120px 110px 90px; padding: 10px 16px; background: #f9f9f9; border-bottom: 0.5px solid #e0e0e0; }
+    .table-head span { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: .04em; }
+    .table-row { display: grid; grid-template-columns: 60px 1fr 120px 110px 90px; padding: 12px 16px; border-bottom: 0.5px solid #f0f0f0; align-items: center; transition: background .12s; }
+    .table-row:last-child { border-bottom: none; }
+    .table-row:hover { background: #f9f9f9; }
 
-        .add-btn:hover {
-            transform: translateY(3px);
-            box-shadow:
-                0 3px 0 #999,
-                0 6px 12px rgba(0,0,0,0.3);
-        }
+    .id-badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; background: #f4f5f7; color: #666; font-weight: 500; display: inline-block; }
+    .prod-name { font-size: 13px; font-weight: 500; color: #0d0d0d; }
+    .prod-cat { font-size: 11px; color: #aaa; margin-top: 2px; }
+    .price { font-size: 13px; font-weight: 500; color: #0d0d0d; }
 
-        table {
-            width: 80%;
-            margin: auto;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
+    .status { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 9px; border-radius: 20px; }
+    .status.active { background: #eaf3de; color: #3b6d11; }
+    .status.low { background: #faeeda; color: #854f0b; }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-        th {
-            background: linear-gradient(to bottom, #1f4037, #99f2c8);
-            color: white;
-            padding: 15px;
-            text-shadow: 1px 1px 3px black;
-        }
+    .actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .act-btn { width: 30px; height: 30px; border-radius: 8px; border: 0.5px solid #e0e0e0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: #666; text-decoration: none; transition: all .12s; }
+    .act-btn:hover { background: #f4f5f7; color: #0d0d0d; }
+    .act-btn.del:hover { background: #fcebeb; color: #a32d2d; border-color: transparent; }
 
-        td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr {
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        tr:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .delete-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            background: linear-gradient(to bottom, #ff4b2b, #ff416c);
-            color: white;
-            text-decoration: none;
-            box-shadow: 0 4px 0 #b22, 0 6px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-
-        .delete-btn:hover {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #b22, 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-    </style>
-
+    .pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 0.5px solid #e0e0e0; }
+    .page-info { font-size: 12px; color: #888; }
+    .page-btns { display: flex; gap: 4px; }
+    .page-btn { width: 28px; height: 28px; border-radius: 8px; border: 0.5px solid #e0e0e0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #666; }
+    .page-btn.active { background: #0d0d0d; color: #fff; border-color: transparent; }
+  </style>
 </head>
-
 <body>
 
-<h2>📦 Product Service New</h2>
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon"><i class="ti ti-package"></i></div>
+      <div>
+        <div class="brand-name">Product Service</div>
+        <div class="brand-sub">Inventory Management</div>
+      </div>
+    </div>
+    <a href="/new" class="add-btn"><i class="ti ti-plus"></i> Add Product</a>
+  </div>
 
-<a href="/new" class="add-btn">➕ Add Product</a>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total Products</div>
+      <div class="stat-val" th:text="${#lists.size(list)}">0</div>
+      <span class="stat-badge">All items</span>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Active Listings</div>
+      <div class="stat-val">—</div>
+      <span class="stat-badge">In stock</span>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Avg. Price</div>
+      <div class="stat-val">—</div>
+      <span class="stat-badge">Catalogue</span>
+    </div>
+  </div>
 
-<table>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input type="text" placeholder="Search products..." />
+    </div>
+    <button class="filter-btn"><i class="ti ti-adjustments-horizontal"></i> Filter</button>
+    <button class="filter-btn"><i class="ti ti-sort-ascending"></i> Sort</button>
+  </div>
 
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
+  <div class="table-card">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Product</span>
+      <span>Price</span>
+      <span>Status</span>
+      <span style="text-align:right">Actions</span>
+    </div>
 
-    <tr th:each="product : ${list}">
+    <div class="table-row" th:each="product : ${list}">
+      <span class="id-badge" th:text="${product.id}"></span>
+      <div>
+        <div class="prod-name" th:text="${product.name}"></div>
+        <div class="prod-cat">Product</div>
+      </div>
+      <div class="price" th:text="'₹' + ${product.price}"></div>
+      <span class="status active"><span class="status-dot"></span>Active</span>
+      <div class="actions">
+        <a href="#" class="act-btn"><i class="ti ti-edit"></i></a>
+        <a th:href="@{/delete/{id}(id=${product.id})}" class="act-btn del"><i class="ti ti-trash"></i></a>
+      </div>
+    </div>
 
-        <td th:text="${product.id}"></td>
-
-        <td th:text="${product.name}"></td>
-
-        <td th:text="${product.price}"></td>
-
-        <td>
-            <a th:href="@{/delete/{id}(id=${product.id})}" class="delete-btn">🗑 Delete</a>
-        </td>
-
-    </tr>
-
-</table>
+    <div class="pagination">
+      <span class="page-info" th:text="'Showing ' + ${#lists.size(list)} + ' products'">Showing products</span>
+      <div class="page-btns">
+        <button class="page-btn"><i class="ti ti-chevron-left" style="font-size:13px"></i></button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn"><i class="ti ti-chevron-right" style="font-size:13px"></i></button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

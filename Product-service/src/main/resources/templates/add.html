@@ -3,38 +3,187 @@
 <head>
   <title>Add Product</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f4f5f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
 
-    .card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; width: 100%; max-width: 420px; overflow: hidden; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
 
-    .card-header { padding: 1.5rem 1.5rem 1.25rem; border-bottom: 0.5px solid #e0e0e0; }
-    .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #888; text-decoration: none; margin-bottom: 1rem; transition: color .12s; }
-    .back-link:hover { color: #0d0d0d; }
-    .header-row { display: flex; align-items: center; gap: 12px; }
-    .header-icon { width: 40px; height: 40px; border-radius: 8px; background: #e6f1fb; display: flex; align-items: center; justify-content: center; color: #185fa5; font-size: 18px; }
-    .header-title { font-size: 17px; font-weight: 600; color: #0d0d0d; }
-    .header-sub { font-size: 12px; color: #888; margin-top: 2px; }
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e8eaed;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 430px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
 
+    /* ── HEADER ── */
+    .card-header {
+      padding: 1.5rem 1.5rem 1.25rem;
+      border-bottom: 1px solid #f0f2f5;
+      background: #fafbfc;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #999;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      font-weight: 500;
+      transition: color .12s;
+    }
+    .back-link:hover { color: #1e3a5f; }
+    .back-link i { font-size: 13px; }
+
+    .header-row { display: flex; align-items: center; gap: 13px; }
+    .header-icon {
+      width: 44px; height: 44px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #1e3a5f, #2e6da4);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 20px;
+      box-shadow: 0 4px 12px rgba(30,58,95,0.25);
+      flex-shrink: 0;
+    }
+    .header-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111;
+      letter-spacing: -0.3px;
+    }
+    .header-sub { font-size: 12px; color: #999; margin-top: 2px; }
+
+    /* ── BODY ── */
     .card-body { padding: 1.5rem; }
-    .field { margin-bottom: 1.1rem; }
-    .field label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; letter-spacing: .02em; }
-    .input-wrap { position: relative; }
-    .input-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 15px; color: #aaa; pointer-events: none; }
-    .input-wrap input { width: 100%; padding: 10px 12px 10px 36px; border: 0.5px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 13px; color: #0d0d0d; outline: none; transition: border-color .15s, box-shadow .15s; }
-    .input-wrap input:focus { border-color: #aaa; box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
-    .input-wrap input::placeholder { color: #bbb; }
-    .hint { font-size: 11px; color: #bbb; margin-top: 5px; }
 
-    .card-footer { padding: 0 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 10px; }
-    .submit-btn { width: 100%; padding: 11px; border-radius: 8px; background: #0d0d0d; color: #fff; font-size: 13px; font-weight: 500; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity .15s; }
-    .submit-btn:hover { opacity: .85; }
-    .divider { display: flex; align-items: center; gap: 10px; }
-    .divider-line { flex: 1; height: 0.5px; background: #e0e0e0; }
-    .divider-text { font-size: 11px; color: #bbb; }
-    .cancel-btn { width: 100%; padding: 10px; border-radius: 8px; background: transparent; border: 0.5px solid #e0e0e0; color: #888; font-size: 13px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .12s; }
-    .cancel-btn:hover { background: #f4f5f7; }
+    .field { margin-bottom: 1.2rem; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 7px;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap i {
+      position: absolute;
+      left: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: #bbb;
+      pointer-events: none;
+      transition: color .15s;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 11px 13px 11px 38px;
+      border: 1px solid #e8eaed;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 13px;
+      font-family: inherit;
+      color: #111;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .input-wrap input:focus {
+      border-color: #2e6da4;
+      box-shadow: 0 0 0 3px rgba(46,109,164,0.12);
+    }
+    .input-wrap input:focus + i,
+    .input-wrap:focus-within i { color: #2e6da4; }
+    .input-wrap input::placeholder { color: #ccc; }
+    .hint {
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── FOOTER ── */
+    .card-footer {
+      padding: 0 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1e3a5f, #2e6da4);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(30,58,95,0.3);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(30,58,95,0.35);
+    }
+    .submit-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(30,58,95,0.25);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .divider-line { flex: 1; height: 1px; background: #f0f2f5; }
+    .divider-text { font-size: 11px; color: #ccc; font-weight: 500; }
+
+    .cancel-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid #e8eaed;
+      color: #888;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background .12s, border-color .12s, color .12s;
+    }
+    .cancel-btn:hover {
+      background: #f5f7fa;
+      border-color: #d0d4da;
+      color: #444;
+    }
   </style>
 </head>
 <body>
